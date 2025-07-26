@@ -10,7 +10,7 @@ import React from "react";
 import { useForm } from "react-hook-form";
 
 const SignUpPage = () => {
-  const [signUpHandler, { isLoading }] = useSignUpRequestMutation();
+  const [signUpHandler, { isLoading, isSuccess }] = useSignUpRequestMutation();
   const router = useRouter();
 
   const {
@@ -31,7 +31,10 @@ const SignUpPage = () => {
         confirmPassword: data.confirmPassword,
       });
 
-      router.replace("/login");
+      if (isSuccess) {
+        router.replace("/login");
+      }
+
       reset();
     } catch (err: unknown) {
       if (err instanceof Error) {
