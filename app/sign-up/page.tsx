@@ -24,18 +24,17 @@ const SignUpPage = () => {
 
   const singUpSubmit = async (data: SignUpSchemaType) => {
     try {
-      await signUpHandler({
+      const { data: respData } = await signUpHandler({
         name: data.name,
         email: data.email,
         password: data.password,
         confirmPassword: data.confirmPassword,
       });
 
-      if (isSuccess) {
+      if (respData.success === true) {
         router.replace("/login");
+        reset();
       }
-
-      reset();
     } catch (err: unknown) {
       if (err instanceof Error) {
         alert(err.message || "Login failed");
@@ -44,6 +43,7 @@ const SignUpPage = () => {
       }
     }
   };
+
   return (
     <div className="h-full flex items-center justify-center">
       <div className="w-1/3 mx-auto shadow-md h-2/3 p-6 rounded-md flex flex-col items-center">
