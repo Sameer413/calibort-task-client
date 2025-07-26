@@ -22,6 +22,8 @@ export default function Home() {
   const [page, setPage] = useState<number>(1);
   const [loading, setLoading] = useState<boolean>(false);
   const isAuthenticated = useAppSelector((state) => state.user.isAuthenticated);
+  console.log(isAuthenticated);
+
   const { isLoading: loadUserLoading } = useLoadUserQuery();
 
   useEffect(() => {
@@ -37,7 +39,11 @@ export default function Home() {
           }
         );
         setUsers(data?.data);
-      } catch (error) {
+      } catch (error: any) {
+        console.error("Error fetching users:", error);
+        alert(
+          error?.response?.data?.error || error.message || JSON.stringify(error)
+        );
       } finally {
         setLoading(false);
       }
@@ -47,7 +53,7 @@ export default function Home() {
   }, [page]);
 
   return loadUserLoading ? (
-    <div className="h-full items-center justify-center">
+    <div className="h-screen flex items-center justify-center">
       <Loader className="animate-spin text-4xl" />
     </div>
   ) : (
@@ -104,37 +110,6 @@ export default function Home() {
           ) : (
             <div className="">No user available at the moment.</div>
           )}
-
-          {/* {users.length ? (
-            users?.map(({ first_name, last_name, email, id, avatar }) => (
-              <div
-                key={id}
-                className="border-2 shadow-sm rounded-md flex gap-2 hover:shadow-md transition-shadow duration-150 ease-linear items-center"
-              >
-                <Image
-                  src={avatar}
-                  alt={`${first_name} image`}
-                  width={100}
-                  height={100}
-                  className="rounded-l-md"
-                />
-                <div className="p-3">
-                  <div className="text-base font-medium">
-                    Full name:{" "}
-                    <span className="font-normal">
-                      {first_name} {last_name}
-                    </span>
-                  </div>
-                  <div className="text-base font-medium">
-                    email:
-                    <span className="font-normal">{email}</span>
-                  </div>
-                </div>
-              </div>
-            ))
-          ) : (
-            <Loader className="text-4xl animate-spin" />
-          )} */}
         </div>
 
         <div className="flex items-center justify-between mt-4">

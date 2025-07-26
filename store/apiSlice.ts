@@ -17,7 +17,7 @@ export const apiSlice = createApi({
     endpoints: (builder) => ({
         loadUser: builder.query<AuthResponse, void>({
             query: () => ({
-                url: 'me',
+                url: 'user',
                 method: 'GET',
                 credentials: "include" as const
             }),
@@ -27,7 +27,8 @@ export const apiSlice = createApi({
 
                 dispatch(
                     setUser({
-                        user: data.user
+                        user: data.user,
+                        isAuthenticated: true
                     })
                 )
             },

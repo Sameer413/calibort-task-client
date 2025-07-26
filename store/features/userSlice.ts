@@ -28,8 +28,9 @@ const userSlice = createSlice({
         updateProfile(state, action: PayloadAction<UserType>) {
             state.user = action.payload;
         },
-        setUser: (state, action: PayloadAction<{ user: UserType }>) => {
-            state.user = action.payload.user
+        setUser: (state, action: PayloadAction<{ user: UserType; isAuthenticated: boolean }>) => {
+            state.user = action.payload.user;
+            state.isAuthenticated = action.payload.isAuthenticated;
         }
 
     },
