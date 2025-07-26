@@ -10,6 +10,7 @@ import {
 import { login } from "@/store/features/userSlice";
 import { Loader, User } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 
@@ -110,6 +111,10 @@ const ProfilePage = () => {
               variant={"destructive"}
             >
               Delete Account
+            </Button>
+
+            <Button variant={"link"}>
+              <Link href={"/"}>Go to home</Link>
             </Button>
           </form>
         </div>
