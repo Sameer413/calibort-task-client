@@ -42,8 +42,12 @@ const LoginPage = () => {
 
       router.replace("/profile");
       reset();
-    } catch (err: any) {
-      alert(err.message || "Login failed");
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        alert(err.message || "Login failed");
+      } else {
+        alert("Login failed");
+      }
     }
   };
 
@@ -84,7 +88,7 @@ const LoginPage = () => {
           </Button>
         </form>
         <div className="mt-3 font-medium">
-          Don't have account?{" "}
+          Don&apos;t have account?{" "}
           <Link href={"/sign-up"} className="text-blue-500 hover:underline">
             sign-up
           </Link>

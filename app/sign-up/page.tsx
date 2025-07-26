@@ -33,8 +33,12 @@ const SignUpPage = () => {
 
       router.replace("/login");
       reset();
-    } catch (err: any) {
-      alert(err.message || "Login failed");
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        alert(err.message || "Login failed");
+      } else {
+        alert("Sign Up failed");
+      }
     }
   };
   return (

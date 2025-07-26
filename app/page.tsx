@@ -8,8 +8,16 @@ import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
+type User = {
+  email: string;
+  first_name?: string;
+  last_name: string;
+  avatar: string;
+  id: number;
+};
+
 export default function Home() {
-  const [users, setUsers] = useState<any[]>([]);
+  const [users, setUsers] = useState<User[]>([]);
   const [page, setPage] = useState<number>(1);
   const [loading, setLoading] = useState<boolean>(false);
   const isAuthenticated = useAppSelector((state) => state.user.isAuthenticated);
