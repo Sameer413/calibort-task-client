@@ -39,11 +39,8 @@ export default function Home() {
           }
         );
         setUsers(data?.data);
-      } catch (error: any) {
+      } catch (error: unknown) {
         console.error("Error fetching users:", error);
-        alert(
-          error?.response?.data?.error || error.message || JSON.stringify(error)
-        );
       } finally {
         setLoading(false);
       }

@@ -21,7 +21,7 @@ export const apiSlice = createApi({
                 method: 'GET',
                 credentials: "include" as const
             }),
-            async onQueryStarted(queryArgument, { queryFulfilled, dispatch }) {
+            async onQueryStarted(_, { queryFulfilled, dispatch }) {
 
                 const { data } = await queryFulfilled;
 

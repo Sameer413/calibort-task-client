@@ -8,7 +8,7 @@ import {
   useGetUserByIdQuery,
 } from "@/store/features/authApi";
 import { login } from "@/store/features/userSlice";
-import { Loader, User, X } from "lucide-react";
+import { Loader, User } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
