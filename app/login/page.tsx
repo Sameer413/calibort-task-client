@@ -33,6 +33,11 @@ const LoginPage = () => {
         password: data.password,
       });
 
+      if (!responseData) {
+        alert("Login failed. Please try again.");
+        return;
+      }
+
       dispatch(
         login({
           user: responseData.user,
@@ -40,8 +45,10 @@ const LoginPage = () => {
         })
       );
 
-      router.replace("/profile");
-      reset();
+      if (responseData.success) {
+        router.replace("/profile");
+        reset();
+      }
     } catch (err: unknown) {
       if (err instanceof Error) {
         alert(err.message || "Login failed");
