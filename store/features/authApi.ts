@@ -1,10 +1,15 @@
 import { apiSlice } from "../apiSlice";
-import { login } from "./userSlice";
+import { login, UserType } from "./userSlice";
+
+type AuthResponse = {
+    user: UserType;
+    success: boolean;
+};
 
 export const authApi = apiSlice.injectEndpoints({
     overrideExisting: true,
     endpoints: (builder) => ({
-        loginRequest: builder.mutation({
+        loginRequest: builder.mutation<AuthResponse, { email: string; password: string }>({
             query: ({ email, password }: { email: string, password: string }) => ({
                 url: 'sign-in',
                 method: 'POST',
@@ -14,9 +19,9 @@ export const authApi = apiSlice.injectEndpoints({
                 },
                 credentials: "include",
             }),
-            async onQueryStarted(queryArgument, { queryFulfilled, dispatch }) {
+            async onQueryStarted(_, { queryFulfilled, dispatch }) {
                 try {
-                    const { data } = await queryFulfilled; // Await only once
+                    const { data } = await queryFulfilled;
                     dispatch(
                         login({
                             user: data?.user,
@@ -42,7 +47,7 @@ export const authApi = apiSlice.injectEndpoints({
                     confirmPassword,
                     name,
                 },
-                credentials: "include",
+                credentials: "include" as const,
             }),
             async onQueryStarted(queryArgument, { queryFulfilled, dispatch }) {
                 try {

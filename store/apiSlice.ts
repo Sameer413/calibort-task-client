@@ -1,5 +1,11 @@
 import { fetchBaseQuery } from "@reduxjs/toolkit/query";
 import { createApi } from "@reduxjs/toolkit/query/react";
+import { setUser, UserType } from "./features/userSlice";
+
+type AuthResponse = {
+    user: UserType;
+    success: boolean;
+};
 
 export const apiSlice = createApi({
     reducerPath: 'api',
@@ -9,5 +15,24 @@ export const apiSlice = createApi({
         credentials: 'include' as const,
     }),
     endpoints: (builder) => ({
+        loadUser: builder.query<AuthResponse, void>({
+            query: () => ({
+                url: 'me',
+                method: 'GET',
+                credentials: "include" as const
+            }),
+            async onQueryStarted(queryArgument, { queryFulfilled, dispatch }) {
+
+                const { data } = await queryFulfilled;
+
+                dispatch(
+                    setUser({
+                        user: data.user
+                    })
+                )
+            },
+        })
     })
-})
+});
+
+export const { useLoadUserQuery } = apiSlice;

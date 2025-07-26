@@ -2,6 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { useAppSelector } from "@/hooks/redux-hook";
+import { useLoadUserQuery } from "@/store/apiSlice";
 import axios from "axios";
 import { ArrowLeft, ArrowRight, Loader, UserRound } from "lucide-react";
 import Image from "next/image";
@@ -21,6 +22,7 @@ export default function Home() {
   const [page, setPage] = useState<number>(1);
   const [loading, setLoading] = useState<boolean>(false);
   const isAuthenticated = useAppSelector((state) => state.user.isAuthenticated);
+  const { isLoading: loadUserLoading } = useLoadUserQuery();
 
   useEffect(() => {
     const fetchAllUsers = async () => {
@@ -44,7 +46,11 @@ export default function Home() {
     fetchAllUsers();
   }, [page]);
 
-  return (
+  return loadUserLoading ? (
+    <div className="h-full items-center justify-center">
+      <Loader className="animate-spin text-4xl" />
+    </div>
+  ) : (
     <div className="flex items-center justify-center relative">
       <div className="absolute right-10 top-10 flex gap-2 items-center">
         {!isAuthenticated && (
