@@ -7,6 +7,7 @@ import {
   useDeleteByIdMutation,
   useGetUserByIdQuery,
   useLazySignOutQuery,
+  useUpdateUserMutation,
 } from "@/store/features/authApi";
 import { login } from "@/store/features/userSlice";
 import { Loader, User } from "lucide-react";
@@ -30,7 +31,9 @@ const ProfilePage = () => {
 
   const { data, isLoading } = useGetUserByIdQuery({});
   const [deleteHandler, { isLoading: deleteLoading }] = useDeleteByIdMutation();
-  const [handleSignOut, { isSuccess }] = useLazySignOutQuery();
+  const [handleSignOut] = useLazySignOutQuery();
+  const [updateUser, { isLoading: updateUserLoading }] =
+    useUpdateUserMutation();
 
   const isAuthenticated = useAppSelector((state) => state.user.isAuthenticated);
 
@@ -59,11 +62,23 @@ const ProfilePage = () => {
   };
 
   const signOutHandler = async () => {
-    await handleSignOut({});
+    const { data } = await handleSignOut({});
 
-    if (isSuccess) {
+    if (data.success) {
       router.replace("/login");
     }
+  };
+
+  const updateUserHandler = async () => {
+    if (!user?.email || !user?.name) {
+      alert("Please enter email or name");
+      return;
+    }
+
+    updateUser({
+      email: user?.email,
+      full_name: user?.name,
+    });
   };
 
   return (
@@ -80,7 +95,7 @@ const ProfilePage = () => {
           </div>
 
           <div className="h-36 my-6" onClick={() => setShowModal(true)}>
-            {user?.image_url && user.image_url ? (
+            {user?.image_url ? (
               <Image
                 src={image!}
                 alt="user image"
@@ -113,9 +128,15 @@ const ProfilePage = () => {
               aria-label="Email address"
             />
 
-            <Button type="submit" className="mt-6 cursor-pointer">
+            <Button
+              type="submit"
+              className="mt-6 cursor-pointer"
+              onClick={updateUserHandler}
+              disabled={updateUserLoading}
+            >
               Save
             </Button>
+
             <Button
               onClick={handleDeleteUser}
               disabled={deleteLoading}

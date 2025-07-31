@@ -79,7 +79,7 @@ export const authApi = apiSlice.injectEndpoints({
             query: () => ({
                 url: 'user',
                 method: 'GET',
-                credentials: "include",
+                credentials: "include" as const,
             }),
         }),
         deleteById: builder.mutation({
@@ -128,6 +128,17 @@ export const authApi = apiSlice.injectEndpoints({
                 method: "GET",
                 credentials: "include" as const
             })
+        }),
+        updateUser: builder.mutation<void, { email: string; full_name: string }>({
+            query: ({ email, full_name }) => ({
+                url: 'user',
+                method: "PUT",
+                credentials: "include" as const,
+                body: {
+                    email,
+                    name: full_name
+                }
+            })
         })
     })
 });
@@ -140,5 +151,6 @@ export const {
     useUploadOrEditImageMutation,
     useLazySignOutQuery,
     useGetThirdPartyUserQuery,
-    useSyncThirdPartyUsersMutation
+    useSyncThirdPartyUsersMutation,
+    useUpdateUserMutation
 } = authApi;
