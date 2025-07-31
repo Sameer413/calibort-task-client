@@ -45,7 +45,7 @@ export default function Home() {
 
         await handleSyncUser({
           data: data.data,
-        });
+        }).unwrap();
 
         setUsers(data?.data);
       } catch (error: unknown) {

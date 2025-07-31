@@ -6,6 +6,7 @@ import { useAppDispatch, useAppSelector } from "@/hooks/redux-hook";
 import {
   useDeleteByIdMutation,
   useGetUserByIdQuery,
+  useLazySignOutQuery,
 } from "@/store/features/authApi";
 import { login } from "@/store/features/userSlice";
 import { Loader, User } from "lucide-react";
@@ -29,6 +30,8 @@ const ProfilePage = () => {
 
   const { data, isLoading } = useGetUserByIdQuery({});
   const [deleteHandler, { isLoading: deleteLoading }] = useDeleteByIdMutation();
+  const [handleSignOut, { isSuccess }] = useLazySignOutQuery();
+
   const isAuthenticated = useAppSelector((state) => state.user.isAuthenticated);
 
   const dispatch = useAppDispatch();
@@ -52,6 +55,14 @@ const ProfilePage = () => {
 
     if (data.success) {
       return router.replace("/sign-up");
+    }
+  };
+
+  const signOutHandler = async () => {
+    await handleSignOut({});
+
+    if (isSuccess) {
+      router.replace("/login");
     }
   };
 
@@ -113,6 +124,8 @@ const ProfilePage = () => {
             >
               Delete Account
             </Button>
+
+            <Button>Sign Out</Button>
 
             <Button variant={"link"}>
               <Link href={"/"}>Go to home</Link>
