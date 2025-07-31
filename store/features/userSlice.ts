@@ -31,8 +31,7 @@ const userSlice = createSlice({
         setUser: (state, action: PayloadAction<{ user: UserType; isAuthenticated: boolean }>) => {
             state.user = action.payload.user;
             state.isAuthenticated = action.payload.isAuthenticated;
-        }
-
+        },
     },
 });
 

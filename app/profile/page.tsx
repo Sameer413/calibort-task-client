@@ -22,6 +22,7 @@ type User = {
 
 const ProfilePage = () => {
   const router = useRouter();
+
   const [user, setUser] = useState<User | undefined>();
   const [showModal, setShowModal] = useState<boolean>(false);
   const [image, setImage] = useState<string | null>();

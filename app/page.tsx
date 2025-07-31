@@ -3,6 +3,7 @@
 import { Button } from "@/components/ui/button";
 import { useAppSelector } from "@/hooks/redux-hook";
 import { useLoadUserQuery } from "@/store/apiSlice";
+import { useSyncThirdPartyUsersMutation } from "@/store/features/authApi";
 import axios from "axios";
 import { ArrowLeft, ArrowRight, Loader, UserRound } from "lucide-react";
 import Image from "next/image";
@@ -21,8 +22,10 @@ export default function Home() {
   const [users, setUsers] = useState<User[]>([]);
   const [page, setPage] = useState<number>(1);
   const [loading, setLoading] = useState<boolean>(false);
+
   const isAuthenticated = useAppSelector((state) => state.user.isAuthenticated);
-  console.log(isAuthenticated);
+
+  const [handleSyncUser] = useSyncThirdPartyUsersMutation();
 
   const { isLoading: loadUserLoading } = useLoadUserQuery();
 
@@ -30,6 +33,7 @@ export default function Home() {
     const fetchAllUsers = async () => {
       try {
         setLoading(true);
+
         const { data } = await axios.get(
           `https://reqres.in/api/users?page=${page}`,
           {
@@ -38,6 +42,11 @@ export default function Home() {
             },
           }
         );
+
+        await handleSyncUser({
+          data: data.data,
+        });
+
         setUsers(data?.data);
       } catch (error: unknown) {
         console.error("Error fetching users:", error);
@@ -79,7 +88,8 @@ export default function Home() {
             <Loader className="text-4xl animate-spin" />
           ) : users.length > 0 ? (
             users?.map(({ first_name, last_name, email, id, avatar }) => (
-              <div
+              <Link
+                href={`/third-party-user-detail/${id}`}
                 key={id}
                 className="border-2 shadow-sm rounded-md flex gap-2 hover:shadow-md transition-shadow duration-150 ease-linear items-center"
               >
@@ -102,7 +112,7 @@ export default function Home() {
                     <span className="font-normal">{email}</span>
                   </div>
                 </div>
-              </div>
+              </Link>
             ))
           ) : (
             <div className="">No user available at the moment.</div>

@@ -6,6 +6,14 @@ type AuthResponse = {
     success: boolean;
 };
 
+export interface ThirdPartyUser {
+    id: number;
+    email: string;
+    first_name: string;
+    last_name: string;
+    avatar: string;
+}
+
 export const authApi = apiSlice.injectEndpoints({
     overrideExisting: true,
     endpoints: (builder) => ({
@@ -97,7 +105,40 @@ export const authApi = apiSlice.injectEndpoints({
                 body: formData,
             }),
         }),
+        signOut: builder.query({
+            query: () => ({
+                url: 'sign-out',
+                method: "GET",
+                credentials: "include" as const
+            }),
+        }),
+        syncThirdPartyUsers: builder.mutation<void, { data: ThirdPartyUser[] }>({
+            query: ({ data }) => ({
+                url: "sync-users",
+                method: "POST",
+                credentials: "include" as const,
+                body: {
+                    data
+                }
+            })
+        }),
+        getThirdPartyUser: builder.query({
+            query: ({ id }: { id: string }) => ({
+                url: `third-party-user/${id}`,
+                method: "GET",
+                credentials: "include" as const
+            })
+        })
     })
 });
 
-export const { useLoginRequestMutation, useSignUpRequestMutation, useGetUserByIdQuery, useDeleteByIdMutation, useUploadOrEditImageMutation } = authApi;
+export const {
+    useLoginRequestMutation,
+    useSignUpRequestMutation,
+    useGetUserByIdQuery,
+    useDeleteByIdMutation,
+    useUploadOrEditImageMutation,
+    useLazySignOutQuery,
+    useGetThirdPartyUserQuery,
+    useSyncThirdPartyUsersMutation
+} = authApi;
