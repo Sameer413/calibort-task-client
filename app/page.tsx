@@ -43,15 +43,13 @@ export default function Home() {
           }
         );
 
-        await handleSyncUser({
-          data: data.data,
-        }).unwrap();
+        await handleSyncUser({ data: data.data }).unwrap(); // 👈 Ensure it throws on error
 
-        setUsers(data?.data);
-      } catch (error: unknown) {
-        console.error("Error fetching users:", error);
+        setUsers(data.data);
+      } catch (error) {
+        console.error("Error fetching or syncing users:", error);
       } finally {
-        setLoading(false);
+        setLoading(false); // 👈 This will now reliably run
       }
     };
 

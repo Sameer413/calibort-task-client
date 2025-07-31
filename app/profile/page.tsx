@@ -125,7 +125,7 @@ const ProfilePage = () => {
               Delete Account
             </Button>
 
-            <Button>Sign Out</Button>
+            <Button onClick={signOutHandler}>Sign Out</Button>
 
             <Button variant={"link"}>
               <Link href={"/"}>Go to home</Link>
